@@ -27,6 +27,9 @@ app.use("/api/auth", authRoutes);
 app.use("/api/bot", botRoutes);
 app.use("/api/chat", chatRoutes);
 app.use("/api/admin", adminRoutes);
+app.get("/", (req, res) => {
+  res.send("API WORKING ✅");
+});
 
 mongoose.connect(process.env.MONGO_URI).then(() => {
     console.log("Database connected");
