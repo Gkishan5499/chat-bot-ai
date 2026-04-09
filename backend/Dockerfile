@@ -1,20 +1,13 @@
-# Use official Node.js LTS image
-FROM node:20-alpine
+FROM node:18
 
-# Set working directory
 WORKDIR /app
 
-# Copy package files first (for better caching)
-COPY package*.json ./
+# Copy only backend files
+COPY backend/package*.json ./
+RUN npm install
 
-# Install production dependencies only
-RUN npm install --omit=dev
+COPY backend ./
 
-# Copy all source files
-COPY . .
-
-# Expose the API port
 EXPOSE 8080
 
-# Start the server
 CMD ["node", "server.js"]
