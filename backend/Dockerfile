@@ -14,7 +14,7 @@ RUN npm install --omit=dev
 COPY . .
 
 # Expose the API port
-EXPOSE 5001
+EXPOSE 8080
 
 # Start the server
 CMD ["node", "server.js"]
