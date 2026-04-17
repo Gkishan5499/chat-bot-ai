@@ -13,7 +13,7 @@
     }
 
     const primaryColor = currentScript.getAttribute('data-color') || "#4F46E5";
-    const botName = currentScript.getAttribute('data-name') || "AI Assistant";
+    let botName = currentScript.getAttribute('data-name') || "AI Assistant";
     const customApiUrl = currentScript.getAttribute('data-api-url');
 
     // Use the same origin as the script by default so embeds work on any deployed domain.
@@ -197,6 +197,14 @@
                 display: flex;
                 gap: 8px;
             }
+            .widget-footer {
+                padding: 0 16px 10px;
+                background: #ffffff;
+                border-top: 1px solid #f8fafc;
+                text-align: center;
+                font-size: 11px;
+                color: #9ca3af;
+            }
             .text-input {
                 flex: 1;
                 background: #f9fafb;
@@ -296,6 +304,8 @@
                     <input type="text" class="text-input" id="chatInput" placeholder="Type your message..." autocomplete="off" />
                     <button type="submit" class="send-btn" id="sendBtn">➤</button>
                 </form>
+
+                <div class="widget-footer">Powerd by Gbot-AI</div>
             </div>
 
             <!-- Launcher -->
@@ -313,6 +323,27 @@
     const emptyState = shadow.getElementById('emptyState');
     const loader = shadow.getElementById('loader');
     const sendBtn = shadow.getElementById('sendBtn');
+    const headerTitle = shadow.querySelector('.header-title');
+
+    const applyBotSettings = async () => {
+        // If integrator already set data-name, keep it as an explicit override.
+        if (currentScript.getAttribute('data-name')) return;
+
+        try {
+            const res = await fetch(`${apiUrl}/chat/bot-settings?apiKey=${encodeURIComponent(apiKey)}`);
+            if (!res.ok) return;
+
+            const data = await res.json();
+            if (data?.botName && headerTitle) {
+                botName = String(data.botName).trim() || botName;
+                headerTitle.textContent = botName;
+            }
+        } catch (err) {
+            // Keep local fallback name if bot settings request fails.
+        }
+    };
+
+    applyBotSettings();
 
     // UI Toggles
     launcherBtn.addEventListener('click', () => {

@@ -72,6 +72,30 @@ function buildGeminiHistory(history) {
     return normalized;
 }
 
+router.get("/bot-settings", async (req, res) => {
+    try {
+        const apiKey = String(req.query.apiKey || "").trim();
+        if (!apiKey) {
+            return res.status(400).json({ error: "apiKey is required" });
+        }
+
+        const user = await User.findOne({ apiKey }).select("botName botColor isActive").lean();
+        if (!user) {
+            return res.status(404).json({ error: "Bot not found" });
+        }
+        if (!user.isActive) {
+            return res.status(403).json({ error: "This bot has been disabled." });
+        }
+
+        return res.json({
+            botName: user.botName || "AI Assistant",
+            botColor: user.botColor || "#4F46E5",
+        });
+    } catch (err) {
+        return res.status(500).json({ error: "Failed to fetch bot settings" });
+    }
+});
+
 router.post("/", async (req, res) => {
     try {
         const { message, apiKey, visitorId, history = [] } = req.body;

@@ -114,6 +114,10 @@ export default function PreviewChatWidget({ color = "#8b5cf6", name = "AI Assist
               ➤
             </button>
           </form>
+
+          <div style={{ padding: "0 12px 10px", background: "#ffffff", borderTop: "1px solid #f8fafc", textAlign: "center", fontSize: "11px", color: "#9ca3af" }}>
+            Powerd by Gbot-AI
+          </div>
         </div>
       )}
 
