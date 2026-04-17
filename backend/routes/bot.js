@@ -30,6 +30,46 @@ router.get("/chats", protect, async (req, res) => {
     res.json(chats);
 });
 
+// Get single conversation
+router.get("/chats/:chatId", protect, async (req, res) => {
+    try {
+        const chat = await Chat.findOne({ _id: req.params.chatId, userId: req.userId });
+        if (!chat) return res.status(404).json({ error: "Conversation not found" });
+        res.json(chat);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Append a message to an existing conversation from dashboard
+router.post("/chats/:chatId/messages", protect, async (req, res) => {
+    try {
+        const { content, role = "assistant" } = req.body;
+        if (!content || !String(content).trim()) {
+            return res.status(400).json({ error: "Message content is required" });
+        }
+
+        const chat = await Chat.findOneAndUpdate(
+            { _id: req.params.chatId, userId: req.userId },
+            {
+                $push: {
+                    messages: {
+                        role,
+                        content: String(content).trim(),
+                        timestamp: new Date(),
+                    }
+                }
+            },
+            { new: true }
+        );
+
+        if (!chat) return res.status(404).json({ error: "Conversation not found" });
+        res.json(chat);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
 // Get dashboard stats
 router.get("/stats", protect, async (req, res) => {
     try {

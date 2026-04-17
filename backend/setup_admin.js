@@ -22,12 +22,6 @@ async function run() {
         { upsert: true, new: true }
     );
 
-    console.log("✅ Admin account created!");
-    console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-    console.log("  Email:    admin@botflow.io");
-    console.log("  Password: Admin@BotFlow2024");
-    console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-    console.log("🔒 Save these credentials safely!");
     process.exit(0);
 }
 
