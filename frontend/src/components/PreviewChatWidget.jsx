@@ -1,18 +1,55 @@
 import { useState } from "react";
 
-export default function PreviewChatWidget({ color = "#8b5cf6", name = "AI Assistant" }) {
+export default function PreviewChatWidget({ color = "#8b5cf6", name = "AI Assistant", apiKey = "" }) {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState([{ sender: "bot", text: "Hi there! How can I help you today?" }]);
   const [input, setInput] = useState("");
+  const [isTyping, setIsTyping] = useState(false);
+  const [visitorId] = useState(() => "preview-visitor-" + Math.random().toString(36).slice(2, 10));
 
-  const send = (e) => {
+  const send = async (e) => {
     e.preventDefault();
     if (!input.trim()) return;
-    setMessages([...messages, { sender: "user", text: input }]);
+
+    const userText = input;
+    const updatedMessages = [...messages, { sender: "user", text: userText }];
+    setMessages(updatedMessages);
     setInput("");
-    setTimeout(() => {
-      setMessages((prev) => [...prev, { sender: "bot", text: "I am a mockup preview widget!" }]);
-    }, 600);
+    setIsTyping(true);
+
+    try {
+      if (!apiKey) {
+        setMessages((prev) => [...prev, { sender: "bot", text: "Missing API key. Save bot settings first." }]);
+        return;
+      }
+
+      const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
+      const history = updatedMessages
+        .slice(0, -1)
+        .map((m) => ({ role: m.sender === "bot" ? "assistant" : "user", content: m.text }));
+
+      const res = await fetch(`${apiUrl}/chat`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          message: userText,
+          apiKey,
+          visitorId,
+          history,
+        }),
+      });
+
+      const data = await res.json();
+      if (!res.ok) {
+        setMessages((prev) => [...prev, { sender: "bot", text: `Error: ${data.error || "Failed to get reply"}` }]);
+      } else {
+        setMessages((prev) => [...prev, { sender: "bot", text: data.reply }]);
+      }
+    } catch (err) {
+      setMessages((prev) => [...prev, { sender: "bot", text: "Network error. Make sure backend is running." }]);
+    } finally {
+      setIsTyping(false);
+    }
   };
 
   return (
@@ -47,6 +84,28 @@ export default function PreviewChatWidget({ color = "#8b5cf6", name = "AI Assist
                 {m.text}
               </div>
             ))}
+            {isTyping && (
+              <div
+                style={{
+                  alignSelf: "flex-start",
+                  background: "#ffffff",
+                  color: "var(--text-h)",
+                  padding: "9px 12px",
+                  borderRadius: "14px 14px 14px 4px",
+                  maxWidth: "85%",
+                  fontSize: "0.85rem",
+                  border: "1px solid #e2e8f0",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 2,
+                }}
+              >
+                <span style={{ fontWeight: 600 }}>Typing</span>
+                <span className="animate-bounce">.</span>
+                <span className="animate-bounce delay-100">.</span>
+                <span className="animate-bounce delay-200">.</span>
+              </div>
+            )}
           </div>
 
           <form onSubmit={send} style={{ padding: "10px 12px", background: "#ffffff", borderTop: "1px solid #e2e8f0", display: "flex", gap: 8 }}>

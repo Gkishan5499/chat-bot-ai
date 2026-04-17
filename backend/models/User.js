@@ -5,7 +5,7 @@ const userSchema = new mongoose.Schema({
     email: { type: String, unique: true, required: true },
     password: { type: String, required: true },
     apiKey: { type: String, unique: true },
-    customPrompt: { type: String, default: "You are a helpful assistant." },
+    customPrompt: { type: String, default: "You are a helpful assistant. Keep replies short and direct." },
     botName: { type: String, default: "AI Assistant" },
     botColor: { type: String, default: "#4F46E5" },
     isAdmin: { type: Boolean, default: false },

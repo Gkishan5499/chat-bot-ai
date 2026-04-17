@@ -79,7 +79,8 @@ export default function ChatWidget({ apiKey, color = "#4F46E5", name = "AI Assis
                             </div>
                         ))}
                         {isLoading && (
-                            <div className="self-start bg-white border border-slate-200 text-slate-500 px-4 py-2.5 rounded-[14px_14px_14px_4px] text-sm shadow-sm flex gap-1">
+                            <div className="self-start bg-white border border-slate-200 text-slate-500 px-4 py-2.5 rounded-[14px_14px_14px_4px] text-sm shadow-sm flex items-center gap-1">
+                                <span className="font-medium">Typing</span>
                                 <span className="animate-bounce">.</span>
                                 <span className="animate-bounce delay-100">.</span>
                                 <span className="animate-bounce delay-200">.</span>

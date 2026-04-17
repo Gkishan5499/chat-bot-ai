@@ -18,7 +18,7 @@ async function run() {
             email: "demo@botflow.io",
             password: hashed,
             apiKey: newApiKey,
-            customPrompt: "You are a helpful AI assistant for BotFlow. Be friendly and concise.",
+            customPrompt: "You are a helpful AI assistant for BotFlow. Keep replies short, direct, and under 3 sentences.",
             botName: "Agent Smith",
             botColor: "#4F46E5"
         },

@@ -11,7 +11,7 @@ async function run() {
             email: "test@example.com",
             password: "hashedpassword",
             apiKey: "sk-real-test-api-key-12345",
-            customPrompt: "You are a helpful assistant.",
+            customPrompt: "You are a helpful assistant. Keep replies short and direct.",
             botName: "AI Assistant",
             botColor: "#4F46E5"
         });

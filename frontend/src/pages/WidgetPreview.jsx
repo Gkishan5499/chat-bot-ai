@@ -3,14 +3,18 @@ import PreviewChatWidget from "../components/PreviewChatWidget";
 import api from "../api";
 
 export default function WidgetPreview() {
-  const [botConfig, setBotConfig] = useState({ botName: "AI Assistant", botColor: "#8b5cf6" });
+  const [botConfig, setBotConfig] = useState({ botName: "AI Assistant", botColor: "#8b5cf6", apiKey: "" });
 
   useEffect(() => {
     api
       .get("/bot/settings")
       .then(({ data }) => {
         if (data.botName) {
-          setBotConfig({ botName: data.botName, botColor: data.botColor });
+          setBotConfig({
+            botName: data.botName,
+            botColor: data.botColor,
+            apiKey: data.apiKey || "",
+          });
         }
       })
       .catch(() => {});
@@ -47,7 +51,7 @@ export default function WidgetPreview() {
           </div>
         </div>
 
-        <PreviewChatWidget name={botConfig.botName} color={botConfig.botColor} />
+        <PreviewChatWidget name={botConfig.botName} color={botConfig.botColor} apiKey={botConfig.apiKey} />
       </div>
     </div>
   );
