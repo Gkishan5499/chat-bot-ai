@@ -45,13 +45,12 @@ export default function ChatWidget({ apiKey, color = "#4F46E5", name = "AI Assis
     }
 
     return (
-        <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-4 font-sans">
+        <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50 flex flex-col items-end gap-3 font-sans">
             {isOpen && (
-                <div className="w-[350px] h-[500px] flex flex-col overflow-hidden rounded-2xl shadow-2xl bg-white border border-gray-200 animate-in fade-in slide-in-from-bottom-4 duration-200">
-                    {/* Header */}
-                    <div style={{ background: color }} className="px-5 py-4 text-white flex justify-between items-center shrink-0">
+                <div className="w-[min(92vw,360px)] h-[min(72vh,520px)] flex flex-col overflow-hidden rounded-2xl shadow-2xl bg-white border border-slate-200 animate-in fade-in slide-in-from-bottom-4 duration-200">
+                    <div style={{ background: color }} className="px-4 py-3 text-white flex justify-between items-center shrink-0">
                         <div className="flex items-center gap-3">
-                            <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center text-lg">🤖</div>
+                            <div className="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center text-xs font-bold">AI</div>
                             <span className="font-semibold">{name}</span>
                         </div>
                         <button onClick={() => setIsOpen(false)} className="bg-transparent border-none text-white text-xl cursor-pointer p-0 opacity-80 hover:opacity-100 transition-opacity">
@@ -59,10 +58,9 @@ export default function ChatWidget({ apiKey, color = "#4F46E5", name = "AI Assis
                         </button>
                     </div>
 
-                    {/* Chat log */}
-                    <div className="flex-1 p-5 overflow-y-auto flex flex-col gap-3 bg-gray-50">
+                    <div className="flex-1 p-4 overflow-y-auto flex flex-col gap-3 bg-slate-50">
                         {messages.length === 0 && (
-                            <div className="text-center text-gray-400 text-sm mt-4">
+                            <div className="text-center text-slate-400 text-sm mt-4">
                                 Send a message to start chatting!
                             </div>
                         )}
@@ -72,16 +70,16 @@ export default function ChatWidget({ apiKey, color = "#4F46E5", name = "AI Assis
                                     background: m.role === 'user' ? color : 'white',
                                     color: m.role === 'user' ? 'white' : '#1f2937',
                                 }}
-                                className={`px-4 py-2.5 max-w-[85%] text-sm shadow-sm ${m.role === 'user'
-                                        ? 'self-end rounded-[16px_16px_4px_16px]'
-                                        : 'self-start rounded-[16px_16px_16px_4px] border border-gray-100'
+                                className={`px-4 py-2.5 max-w-[88%] text-sm shadow-sm ${m.role === 'user'
+                                        ? 'self-end rounded-[14px_14px_4px_14px]'
+                                        : 'self-start rounded-[14px_14px_14px_4px] border border-slate-200'
                                     }`}
                             >
                                 {m.content}
                             </div>
                         ))}
                         {isLoading && (
-                            <div className="self-start bg-white border border-gray-100 text-gray-500 px-4 py-2.5 rounded-[16px_16px_16px_4px] text-sm shadow-sm flex gap-1">
+                            <div className="self-start bg-white border border-slate-200 text-slate-500 px-4 py-2.5 rounded-[14px_14px_14px_4px] text-sm shadow-sm flex gap-1">
                                 <span className="animate-bounce">.</span>
                                 <span className="animate-bounce delay-100">.</span>
                                 <span className="animate-bounce delay-200">.</span>
@@ -89,13 +87,12 @@ export default function ChatWidget({ apiKey, color = "#4F46E5", name = "AI Assis
                         )}
                     </div>
 
-                    {/* Input */}
-                    <form onSubmit={send} className="px-4 py-3 bg-white border-t border-gray-100 flex gap-2">
+                    <form onSubmit={send} className="px-3 py-3 bg-white border-t border-slate-200 flex gap-2">
                         <input
                             value={input}
                             onChange={e => setInput(e.target.value)}
                             placeholder="Type your message..."
-                            className="flex-1 px-4 py-2.5 rounded-full border border-gray-200 bg-gray-50 text-gray-800 text-sm outline-none focus:border-indigo-400 focus:bg-white transition-colors"
+                            className="flex-1 px-4 py-2.5 rounded-full border border-slate-300 bg-slate-50 text-slate-800 text-sm outline-none focus:border-teal-600 focus:bg-white transition-colors"
                             disabled={isLoading}
                         />
                         <button
@@ -114,9 +111,9 @@ export default function ChatWidget({ apiKey, color = "#4F46E5", name = "AI Assis
                 <button
                     onClick={() => setIsOpen(true)}
                     style={{ background: color }}
-                    className="text-white w-14 h-14 rounded-full border-none cursor-pointer text-2xl flex items-center justify-center shadow-[0_8px_24px_rgba(0,0,0,0.2)] hover:scale-105 active:scale-95 transition-transform"
+                    className="text-white w-14 h-14 rounded-full border-none cursor-pointer text-sm font-bold flex items-center justify-center shadow-[0_12px_26px_rgba(0,0,0,0.24)] hover:scale-105 active:scale-95 transition-transform"
                 >
-                    💬
+                    AI
                 </button>
             )}
         </div>

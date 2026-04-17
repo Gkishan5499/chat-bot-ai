@@ -13,20 +13,26 @@ app.use(express.json())
 
 const allowedOrigins = [
   "http://localhost:5173",
+  "http://localhost:5174",
+  "http://localhost:5175",
   "https://chat-bot-ai-one-smoky.vercel.app"
 ];
 
-app.use(cors({
+const isLocalhostOrigin = (origin) => /^http:\/\/localhost:\d+$/.test(origin);
+
+const corsOptions = {
   origin: function (origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
+    if (!origin || allowedOrigins.includes(origin) || isLocalhostOrigin(origin)) {
       callback(null, true);
     } else {
       callback(new Error("Not allowed by CORS"));
     }
   },
   credentials: true
-}));
-app.options(/.*/, cors()); // Handle preflight - regex works in all Express versions
+};
+
+app.use(cors(corsOptions));
+app.options(/.*/, cors(corsOptions)); // Handle preflight with the same origin policy
 
 
 
