@@ -15,7 +15,7 @@ const allowedOrigins = [
   "http://localhost:5173",
   "http://localhost:5174",
   "http://localhost:5175",
-  "https://chat-bot-ai-one-smoky.vercel.app"
+  "https://chat-bot-ai-orcin.vercel.app"
 ];
 
 const isLocalhostOrigin = (origin) => /^http:\/\/localhost:\d+$/.test(origin);
