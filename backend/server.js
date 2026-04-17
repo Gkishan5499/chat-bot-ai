@@ -11,10 +11,20 @@ import adminRoutes from "./routes/admin.js";
 const app = express();
 app.use(express.json())
 
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://chat-bot-ai-one-smoky.vercel.app"
+];
+
 app.use(cors({
-    origin: '*',
-    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true
 }));
 app.options(/.*/, cors()); // Handle preflight - regex works in all Express versions
 
