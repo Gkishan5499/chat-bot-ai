@@ -34,14 +34,19 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.options(/.*/, cors(corsOptions)); // Handle preflight with the same origin policy
 
-
+// Public chat endpoint - allow all origins since it's a public widget
+const publicCorsOptions = {
+  origin: "*",
+  credentials: false
+};
+app.options("/api/chat", cors(publicCorsOptions));
 
 // Serve static files from the 'public' directory
 app.use(express.static('public'));
 
 app.use("/api/auth", authRoutes);
 app.use("/api/bot", botRoutes);
-app.use("/api/chat", chatRoutes);
+app.use("/api/chat", cors(publicCorsOptions), chatRoutes);
 app.use("/api/admin", adminRoutes);
 app.get("/", (req, res) => {
   res.send("API WORKING ✅");
