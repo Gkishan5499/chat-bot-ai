@@ -37,8 +37,8 @@ mongoose.connect(process.env.MONGO_URI).then(() => {
     console.log("Database is not connected", error)
 })
 
-const PORT = Number(process.env.PORT) || 8080;
+const PORT = Number(process.env.PORT) || 5000;
 
-app.listen(PORT,"0.0.0.0", () => {
+app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 })
