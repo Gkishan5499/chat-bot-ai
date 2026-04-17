@@ -14,8 +14,18 @@
 
     const primaryColor = currentScript.getAttribute('data-color') || "#4F46E5";
     const botName = currentScript.getAttribute('data-name') || "AI Assistant";
-    // We assume backend is mounted exactly from the same host dispensing the script, but default to localhost for test
-    const apiUrl = currentScript.src.includes('localhost') ? 'http://localhost:5001/api' : 'https://api.botflow.io/api';
+    const customApiUrl = currentScript.getAttribute('data-api-url');
+
+    // Use the same origin as the script by default so embeds work on any deployed domain.
+    let apiUrl = customApiUrl;
+    if (!apiUrl) {
+        try {
+            const scriptOrigin = new URL(currentScript.src).origin;
+            apiUrl = `${scriptOrigin}/api`;
+        } catch (err) {
+            apiUrl = 'https://chat-bot-ai-oor0.onrender.com/api';
+        }
+    }
     
     // Generate an anonymous visitor session ID that lasts for the page view
     const visitorId = "visitor-" + Math.random().toString(36).substr(2, 9);
