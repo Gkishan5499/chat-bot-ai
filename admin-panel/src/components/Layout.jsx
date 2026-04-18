@@ -31,6 +31,9 @@ export default function Layout() {
                     <NavLink to="/logs" className={({ isActive }) => 'nav-item' + (isActive ? ' active' : '')}>
                         <span className="icon">🔒</span> Security Logs
                     </NavLink>
+                    <NavLink to="/faqs" className={({ isActive }) => 'nav-item' + (isActive ? ' active' : '')}>
+                        <span className="icon">❓</span> FAQ Manager
+                    </NavLink>
                 </nav>
 
                 <div className="sidebar-footer">

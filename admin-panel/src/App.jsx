@@ -5,6 +5,7 @@ import Dashboard from './pages/Dashboard';
 import Users from './pages/Users';
 import Chats from './pages/Chats';
 import Logs from './pages/Logs';
+import Faqs from './pages/Faqs';
 
 const isAuth = () => !!localStorage.getItem('adminToken');
 
@@ -17,6 +18,7 @@ export default function App() {
                 <Route path="users" element={<Users />} />
                 <Route path="chats" element={<Chats />} />
                 <Route path="logs" element={<Logs />} />
+                <Route path="faqs" element={<Faqs />} />
             </Route>
         </Routes>
     );

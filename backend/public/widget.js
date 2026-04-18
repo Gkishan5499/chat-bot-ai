@@ -29,8 +29,24 @@
     
     // Generate an anonymous visitor session ID that lasts for the page view
     const visitorId = "visitor-" + Math.random().toString(36).substr(2, 9);
-    let messages = [];
-    let isOpen = false;
+    const quickQuestions = [
+        "What is BotFlow?",
+        "Why should I choose BotFlow?",
+        "How do I set up an AI Chatbot?",
+        "I have a different question"
+    ];
+
+    const faqReplies = {
+        "what is botflow?": "BotFlow is an AI chatbot platform for websites. It helps you chat with visitors, qualify leads, and turn more visitors into customers.",
+        "why should i choose botflow?": "Choose BotFlow for fast setup, 24/7 lead capture, and a simple widget that works on any website.",
+        "how do i set up an ai chatbot?": "Create your account, configure bot behavior, copy the widget script, and paste it on your website. You can launch in minutes.",
+        "i have a different question": "Please type your question below and I will assist you with a live response."
+    };
+
+    let messages = [
+        { role: 'model', content: `Hi! I am ${botName}. Ask me anything about your chatbot setup and plans.` }
+    ];
+    let isOpen = true;
     let isLoading = false;
 
     // Create container and Shadow DOM
@@ -159,6 +175,27 @@
                 color: #9ca3af;
                 margin-top: 16px;
                 font-size: 13px;
+            }
+
+            .quick-questions {
+                display: flex;
+                flex-direction: column;
+                align-items: flex-end;
+                gap: 8px;
+                margin-top: 4px;
+            }
+            .quick-btn {
+                border: 1px solid ${primaryColor};
+                background: #ffffff;
+                color: ${primaryColor};
+                border-radius: 10px;
+                padding: 8px 12px;
+                font-size: 13px;
+                cursor: pointer;
+                transition: background 0.2s;
+            }
+            .quick-btn:hover {
+                background: #f0fdf4;
             }
 
             .loader {
@@ -293,6 +330,9 @@
                 
                 <div class="log" id="chatLog">
                     <div class="empty-state" id="emptyState">Send a message to start chatting!</div>
+                    <div class="quick-questions" id="quickQuestions">
+                        ${quickQuestions.map((q) => `<button class="quick-btn" type="button" data-question="${q.replace(/"/g, '&quot;')}">${q}</button>`).join('')}
+                    </div>
                     <div class="loader" id="loader">
                         <div class="dot"></div>
                         <div class="dot"></div>
@@ -324,6 +364,7 @@
     const loader = shadow.getElementById('loader');
     const sendBtn = shadow.getElementById('sendBtn');
     const headerTitle = shadow.querySelector('.header-title');
+    const quickQuestionsEl = shadow.getElementById('quickQuestions');
 
     const applyBotSettings = async () => {
         // If integrator already set data-name, keep it as an explicit override.
@@ -359,6 +400,11 @@
         launcherBtn.classList.remove('hidden');
     });
 
+    if (isOpen) {
+        chatWindow.classList.add('open');
+        launcherBtn.classList.add('hidden');
+    }
+
     // Rendering Messages
     const renderMessages = () => {
         // Remove existing bubbles
@@ -366,7 +412,12 @@
         
         if (messages.length > 0) {
             emptyState.style.display = 'none';
+        } else {
+            emptyState.style.display = 'block';
         }
+
+        const userMessageCount = messages.filter((m) => m.role === 'user').length;
+        quickQuestionsEl.style.display = userMessageCount === 0 && !isLoading ? 'flex' : 'none';
 
         messages.forEach(msg => {
             const el = document.createElement('div');
@@ -390,16 +441,25 @@
         chatLog.scrollTop = chatLog.scrollHeight;
     };
 
-    // Form Submission
-    chatForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const text = chatInput.value.trim();
-        if (!text || isLoading) return;
+    const getFaqReply = (text) => {
+        const key = String(text || '').trim().toLowerCase();
+        return faqReplies[key] || null;
+    };
 
-        // Push User Message
-        messages.push({ role: 'user', content: text });
-        chatInput.value = '';
+    const sendMessage = async (text) => {
+        const cleanText = String(text || '').trim();
+        if (!cleanText || isLoading) return;
+
+        messages.push({ role: 'user', content: cleanText });
         renderMessages();
+
+        const localReply = getFaqReply(cleanText);
+        if (localReply) {
+            messages.push({ role: 'model', content: localReply });
+            renderMessages();
+            return;
+        }
+
         toggleLoading(true);
 
         try {
@@ -407,10 +467,10 @@
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    message: text,
+                    message: cleanText,
                     apiKey: apiKey,
                     visitorId: visitorId,
-                    history: messages.slice(0, -1) // Excluding the one we just pushed
+                    history: messages.slice(0, -1)
                 })
             });
 
@@ -428,5 +488,23 @@
             toggleLoading(false);
             renderMessages();
         }
+    };
+
+    shadow.querySelectorAll('.quick-btn').forEach((btn) => {
+        btn.addEventListener('click', () => {
+            const question = btn.getAttribute('data-question') || '';
+            sendMessage(question);
+        });
     });
+
+    // Form Submission
+    chatForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const text = chatInput.value.trim();
+        if (!text) return;
+        chatInput.value = '';
+        await sendMessage(text);
+    });
+
+    renderMessages();
 })();

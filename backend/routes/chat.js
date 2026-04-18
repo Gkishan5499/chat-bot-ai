@@ -2,6 +2,7 @@ import express from "express";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import User from "../models/User.js";
 import Chat from "../models/Chat.js";
+import Faq from "../models/Faq.js";
 
 const router = express.Router();
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
@@ -93,6 +94,19 @@ router.get("/bot-settings", async (req, res) => {
         });
     } catch (err) {
         return res.status(500).json({ error: "Failed to fetch bot settings" });
+    }
+});
+
+router.get("/faqs", async (_req, res) => {
+    try {
+        const faqs = await Faq.find({ isActive: true })
+            .sort({ sortOrder: 1, createdAt: -1 })
+            .select("question answer keywords minMatches sortOrder")
+            .lean();
+
+        return res.json(faqs);
+    } catch (err) {
+        return res.status(500).json({ error: "Failed to fetch FAQs" });
     }
 });
 

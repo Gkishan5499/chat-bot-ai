@@ -2,6 +2,7 @@ import express from "express";
 import User from "../models/User.js";
 import Chat from "../models/Chat.js";
 import LoginLog from "../models/LoginLog.js";
+import Faq from "../models/Faq.js";
 import { requireAdmin } from "../middleware/auth.js";
 
 const router = express.Router();
@@ -84,6 +85,93 @@ router.get("/logs", requireAdmin, async (req, res) => {
             .sort({ createdAt: -1 })
             .limit(100);
         res.json(logs);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// GET /api/admin/faqs — list all FAQs for management
+router.get("/faqs", requireAdmin, async (_req, res) => {
+    try {
+        const faqs = await Faq.find()
+            .sort({ sortOrder: 1, createdAt: -1 })
+            .lean();
+        res.json(faqs);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// POST /api/admin/faqs — create FAQ
+router.post("/faqs", requireAdmin, async (req, res) => {
+    try {
+        const { question, answer, keywords = [], minMatches = 1, isActive = true, sortOrder = 0 } = req.body;
+
+        if (!question || !String(question).trim()) {
+            return res.status(400).json({ error: "Question is required" });
+        }
+        if (!answer || !String(answer).trim()) {
+            return res.status(400).json({ error: "Answer is required" });
+        }
+
+        const normalizedKeywords = Array.isArray(keywords)
+            ? keywords.map((k) => String(k).trim().toLowerCase()).filter(Boolean)
+            : String(keywords)
+                .split(",")
+                .map((k) => k.trim().toLowerCase())
+                .filter(Boolean);
+
+        const faq = await Faq.create({
+            question: String(question).trim(),
+            answer: String(answer).trim(),
+            keywords: normalizedKeywords,
+            minMatches: Math.max(1, Number(minMatches) || 1),
+            isActive: Boolean(isActive),
+            sortOrder: Number(sortOrder) || 0,
+            createdBy: req.userId,
+        });
+
+        res.status(201).json(faq);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// PUT /api/admin/faqs/:id — update FAQ
+router.put("/faqs/:id", requireAdmin, async (req, res) => {
+    try {
+        const { question, answer, keywords, minMatches, isActive, sortOrder } = req.body;
+
+        const update = {};
+        if (question !== undefined) update.question = String(question).trim();
+        if (answer !== undefined) update.answer = String(answer).trim();
+        if (keywords !== undefined) {
+            update.keywords = Array.isArray(keywords)
+                ? keywords.map((k) => String(k).trim().toLowerCase()).filter(Boolean)
+                : String(keywords)
+                    .split(",")
+                    .map((k) => k.trim().toLowerCase())
+                    .filter(Boolean);
+        }
+        if (minMatches !== undefined) update.minMatches = Math.max(1, Number(minMatches) || 1);
+        if (isActive !== undefined) update.isActive = Boolean(isActive);
+        if (sortOrder !== undefined) update.sortOrder = Number(sortOrder) || 0;
+
+        const faq = await Faq.findByIdAndUpdate(req.params.id, update, { new: true });
+        if (!faq) return res.status(404).json({ error: "FAQ not found" });
+
+        res.json(faq);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// DELETE /api/admin/faqs/:id — delete FAQ
+router.delete("/faqs/:id", requireAdmin, async (req, res) => {
+    try {
+        const faq = await Faq.findByIdAndDelete(req.params.id);
+        if (!faq) return res.status(404).json({ error: "FAQ not found" });
+        res.json({ message: "FAQ deleted" });
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
