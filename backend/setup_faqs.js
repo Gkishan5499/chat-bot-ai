@@ -9,6 +9,7 @@ const seedFaqs = [
       "Sign up for a free account: visit tawk.to and fill out the signup form with your name, email, and desired password.",
     keywords: ["sign", "signup", "register", "create", "account", "new", "tawk"],
     minMatches: 2,
+    showOnBot: true,
     sortOrder: 1,
   },
   {
@@ -16,6 +17,7 @@ const seedFaqs = [
     answer: "Log in to your account: go to dashboard.tawk.to and sign in with your email and password.",
     keywords: ["log", "login", "sign in", "dashboard", "dashboard.tawk.to", "account"],
     minMatches: 1,
+    showOnBot: true,
     sortOrder: 2,
   },
   {
@@ -24,6 +26,7 @@ const seedFaqs = [
       "Add the chat widget: 1) Click the Administration (gear) icon in the upper tab menu. 2) In the left menu, select Chat Widget. 3) Copy the Widget Code. 4) Add it to your site HTML before the </body> tag.",
     keywords: ["add", "install", "widget", "code", "html", "body", "script", "chat"],
     minMatches: 2,
+    showOnBot: true,
     sortOrder: 3,
   },
   {
@@ -32,6 +35,7 @@ const seedFaqs = [
       "To use it on your website: sign in to dashboard.tawk.to, open Administration > Chat Widget, copy the widget code, and paste it before the </body> tag on your site.",
     keywords: ["use", "website", "site", "integrate", "embed", "setup", "add", "install"],
     minMatches: 2,
+    showOnBot: true,
     sortOrder: 4,
   },
   {
@@ -40,6 +44,7 @@ const seedFaqs = [
       "For more detailed information, check these articles: How to create a new account, and How to add the tawk.to widget to my website.",
     keywords: ["article", "articles", "help", "guide", "detailed", "documentation", "docs", "information"],
     minMatches: 1,
+    showOnBot: true,
     sortOrder: 5,
   },
   {
@@ -47,6 +52,7 @@ const seedFaqs = [
     answer: "You can also book a free onboarding call with a member of our team for guided setup and best practices.",
     keywords: ["onboarding", "call", "book", "meeting", "support", "team", "free call"],
     minMatches: 1,
+    showOnBot: true,
     sortOrder: 6,
   },
   {
@@ -55,6 +61,7 @@ const seedFaqs = [
       "We offer flexible packages based on your needs: Starter for small sites, Growth for scaling teams, and Agency for multiple client websites.",
     keywords: ["price", "pricing", "cost", "plan", "package", "monthly", "subscription"],
     minMatches: 1,
+    showOnBot: true,
     sortOrder: 7,
   },
   {
@@ -63,6 +70,7 @@ const seedFaqs = [
       "Yes, you can start with a free trial/demo flow and test the chatbot on your website before moving to a paid plan.",
     keywords: ["free", "trial", "demo", "start free", "test"],
     minMatches: 1,
+    showOnBot: true,
     sortOrder: 8,
   },
   {
@@ -71,6 +79,7 @@ const seedFaqs = [
       "Yes, you can add the widget to most platforms like WordPress, Shopify, Wix, Webflow, or any custom HTML/React website using the script snippet.",
     keywords: ["wordpress", "shopify", "wix", "webflow", "react", "html", "cms"],
     minMatches: 1,
+    showOnBot: true,
     sortOrder: 9,
   },
   {
@@ -79,6 +88,7 @@ const seedFaqs = [
       "You can customize branding such as bot name, color, and tone so the chat experience matches your website style.",
     keywords: ["custom", "brand", "color", "name", "theme", "design", "logo"],
     minMatches: 1,
+    showOnBot: true,
     sortOrder: 10,
   },
   {
@@ -87,6 +97,7 @@ const seedFaqs = [
       "Setup is quick and usually takes just a few minutes: copy the script, paste it before </body>, and publish your site.",
     keywords: ["time", "how long", "minutes", "quick", "fast", "setup time"],
     minMatches: 1,
+    showOnBot: true,
     sortOrder: 11,
   },
   {
@@ -95,6 +106,7 @@ const seedFaqs = [
       "To remove the chat widget, simply delete the widget script from your website HTML or disable it from your dashboard settings.",
     keywords: ["remove", "uninstall", "delete", "disable", "turn off"],
     minMatches: 1,
+    showOnBot: true,
     sortOrder: 12,
   },
   {
@@ -102,6 +114,7 @@ const seedFaqs = [
     answer: "Yes, the chat widget is responsive and works on desktop, tablet, and mobile devices.",
     keywords: ["mobile", "phone", "responsive", "tablet", "device"],
     minMatches: 1,
+    showOnBot: true,
     sortOrder: 13,
   },
   {
@@ -110,6 +123,7 @@ const seedFaqs = [
       "We follow standard security and privacy best practices. If needed, we can also guide you on compliance setup like privacy policy and consent messaging.",
     keywords: ["security", "secure", "safe", "privacy", "gdpr", "data"],
     minMatches: 1,
+    showOnBot: true,
     sortOrder: 14,
   },
   {
@@ -117,6 +131,7 @@ const seedFaqs = [
     answer: "You can configure chatbot replies for multiple languages based on your audience and business needs.",
     keywords: ["language", "multilingual", "translate", "hindi", "english", "arabic"],
     minMatches: 1,
+    showOnBot: true,
     sortOrder: 15,
   },
   {
@@ -125,6 +140,7 @@ const seedFaqs = [
       "The chatbot helps capture and qualify leads, then guides visitors toward actions like booking calls, sending contact details, or making a purchase.",
     keywords: ["lead", "capture", "conversion", "customer", "sales", "bookings"],
     minMatches: 1,
+    showOnBot: true,
     sortOrder: 16,
   },
   {
@@ -132,6 +148,7 @@ const seedFaqs = [
     answer: "Yes, you can set flows to hand off conversations to a human agent when needed.",
     keywords: ["human", "agent", "manual", "handoff", "transfer", "live person"],
     minMatches: 1,
+    showOnBot: true,
     sortOrder: 17,
   },
   {
@@ -139,6 +156,7 @@ const seedFaqs = [
     answer: "Sure, our team can help with setup and optimization. You can book an onboarding call for step-by-step guidance.",
     keywords: ["contact", "support", "help me", "talk to team", "reach"],
     minMatches: 1,
+    showOnBot: true,
     sortOrder: 18,
   },
   {
@@ -146,6 +164,7 @@ const seedFaqs = [
     answer: "You are welcome. Let me know if you have any other question about setup, widget install, or onboarding.",
     keywords: ["thank", "thanks", "ok", "great"],
     minMatches: 1,
+    showOnBot: true,
     sortOrder: 99,
   },
 ];

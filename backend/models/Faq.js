@@ -7,6 +7,7 @@ const faqSchema = new mongoose.Schema(
     keywords: [{ type: String, trim: true, lowercase: true }],
     minMatches: { type: Number, default: 1, min: 1 },
     isActive: { type: Boolean, default: true },
+    showOnBot: { type: Boolean, default: true },
     sortOrder: { type: Number, default: 0 },
     createdBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
   },

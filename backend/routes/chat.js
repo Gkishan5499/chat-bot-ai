@@ -101,7 +101,7 @@ router.get("/faqs", async (_req, res) => {
     try {
         const faqs = await Faq.find({ isActive: true })
             .sort({ sortOrder: 1, createdAt: -1 })
-            .select("question answer keywords minMatches sortOrder")
+            .select("question answer keywords minMatches sortOrder showOnBot")
             .lean();
 
         return res.json(faqs);

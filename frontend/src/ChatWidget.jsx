@@ -54,6 +54,7 @@ export default function ChatWidget({ apiKey, color = "#4F46E5", name = "AI Assis
                         minMatches: Math.max(1, Number(item.minMatches) || 1),
                         reply: String(item.answer).trim(),
                         question: String(item.question).trim(),
+                        showOnBot: item.showOnBot !== false,
                     }));
 
                 setBackendFaqs(normalized);
@@ -95,7 +96,10 @@ export default function ChatWidget({ apiKey, color = "#4F46E5", name = "AI Assis
     }, [backendFaqs]);
 
     const quickQuestions = useMemo(() => {
-        const questions = backendFaqs.map((item) => item.question).filter(Boolean);
+        const questions = backendFaqs
+            .filter((item) => item.showOnBot !== false)
+            .map((item) => item.question)
+            .filter(Boolean);
         return questions.slice(0, 4);
     }, [backendFaqs]);
 

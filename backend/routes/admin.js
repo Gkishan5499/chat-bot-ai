@@ -105,7 +105,7 @@ router.get("/faqs", requireAdmin, async (_req, res) => {
 // POST /api/admin/faqs — create FAQ
 router.post("/faqs", requireAdmin, async (req, res) => {
     try {
-        const { question, answer, keywords = [], minMatches = 1, isActive = true, sortOrder = 0 } = req.body;
+        const { question, answer, keywords = [], minMatches = 1, isActive = true, showOnBot = true, sortOrder = 0 } = req.body;
 
         if (!question || !String(question).trim()) {
             return res.status(400).json({ error: "Question is required" });
@@ -127,6 +127,7 @@ router.post("/faqs", requireAdmin, async (req, res) => {
             keywords: normalizedKeywords,
             minMatches: Math.max(1, Number(minMatches) || 1),
             isActive: Boolean(isActive),
+            showOnBot: Boolean(showOnBot),
             sortOrder: Number(sortOrder) || 0,
             createdBy: req.userId,
         });
@@ -140,7 +141,7 @@ router.post("/faqs", requireAdmin, async (req, res) => {
 // PUT /api/admin/faqs/:id — update FAQ
 router.put("/faqs/:id", requireAdmin, async (req, res) => {
     try {
-        const { question, answer, keywords, minMatches, isActive, sortOrder } = req.body;
+        const { question, answer, keywords, minMatches, isActive, showOnBot, sortOrder } = req.body;
 
         const update = {};
         if (question !== undefined) update.question = String(question).trim();
@@ -155,6 +156,7 @@ router.put("/faqs/:id", requireAdmin, async (req, res) => {
         }
         if (minMatches !== undefined) update.minMatches = Math.max(1, Number(minMatches) || 1);
         if (isActive !== undefined) update.isActive = Boolean(isActive);
+        if (showOnBot !== undefined) update.showOnBot = Boolean(showOnBot);
         if (sortOrder !== undefined) update.sortOrder = Number(sortOrder) || 0;
 
         const faq = await Faq.findByIdAndUpdate(req.params.id, update, { new: true });

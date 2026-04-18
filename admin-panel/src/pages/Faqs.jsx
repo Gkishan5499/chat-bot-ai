@@ -8,6 +8,7 @@ const emptyForm = {
   minMatches: 1,
   sortOrder: 0,
   isActive: true,
+  showOnBot: true,
 };
 
 export default function Faqs() {
@@ -41,6 +42,7 @@ export default function Faqs() {
     minMatches: Number(data.minMatches) || 1,
     sortOrder: Number(data.sortOrder) || 0,
     isActive: Boolean(data.isActive),
+    showOnBot: Boolean(data.showOnBot),
   });
 
   const resetForm = () => {
@@ -78,6 +80,7 @@ export default function Faqs() {
       minMatches: faq.minMatches || 1,
       sortOrder: faq.sortOrder || 0,
       isActive: faq.isActive !== false,
+      showOnBot: faq.showOnBot !== false,
     });
   };
 
@@ -162,14 +165,25 @@ export default function Faqs() {
             </div>
           </div>
 
-          <label style={{ display: "flex", alignItems: "center", gap: 8, color: "var(--text-h)", fontSize: "0.85rem" }}>
-            <input
-              type="checkbox"
-              checked={form.isActive}
-              onChange={(e) => setForm((p) => ({ ...p, isActive: e.target.checked }))}
-            />
-            Active
-          </label>
+          <div style={{ display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap" }}>
+            <label style={{ display: "flex", alignItems: "center", gap: 8, color: "var(--text-h)", fontSize: "0.85rem" }}>
+              <input
+                type="checkbox"
+                checked={form.isActive}
+                onChange={(e) => setForm((p) => ({ ...p, isActive: e.target.checked }))}
+              />
+              Active
+            </label>
+
+            <label style={{ display: "flex", alignItems: "center", gap: 8, color: "var(--text-h)", fontSize: "0.85rem" }}>
+              <input
+                type="checkbox"
+                checked={form.showOnBot}
+                onChange={(e) => setForm((p) => ({ ...p, showOnBot: e.target.checked }))}
+              />
+              Show question on bot
+            </label>
+          </div>
 
           <div style={{ display: "flex", gap: 8 }}>
             <button className="btn" type="submit" disabled={saving}>
@@ -201,6 +215,7 @@ export default function Faqs() {
                 <th>Keywords</th>
                 <th>Rules</th>
                 <th>Status</th>
+                <th>Bot Display</th>
                 <th>Actions</th>
               </tr>
             </thead>
@@ -222,6 +237,11 @@ export default function Faqs() {
                   <td>
                     <span className={`badge ${faq.isActive ? "badge-success" : "badge-danger"}`}>
                       {faq.isActive ? "Active" : "Disabled"}
+                    </span>
+                  </td>
+                  <td>
+                    <span className={`badge ${faq.showOnBot !== false ? "badge-success" : "badge-warning"}`}>
+                      {faq.showOnBot !== false ? "Shown" : "Hidden"}
                     </span>
                   </td>
                   <td>
